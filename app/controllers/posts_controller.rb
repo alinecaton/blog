@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
   def index
     @posts = Post.all
   end
@@ -17,11 +18,31 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @post.update(permited_params)
+      redirect_to @post
+    else
+      flash.now[:alert] = @post.errors.full_messages.to_sentence
+      render :edit
+    end
+  end
+
   def show
-    @post = Post.find params[:id]
+  end
+
+  def destroy
+    @post.destroy
+    redirect_to posts_url
   end
 
   private
+
+  def set_post
+    @post = Post.find params[:id]
+  end
 
   def permited_params
     params.require(:post).permit(:title, :content, :user_id)
