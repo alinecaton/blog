@@ -11,6 +11,7 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(permited_params)
     if @post.save
+      flash[:notice] = 'Post created successfully.'
       redirect_to @post
     else
       flash.now[:alert] = @post.errors.full_messages.to_sentence
@@ -23,6 +24,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(permited_params)
+      flash[:notice] = 'Post edited successfully.'
       redirect_to @post
     else
       flash.now[:alert] = @post.errors.full_messages.to_sentence
