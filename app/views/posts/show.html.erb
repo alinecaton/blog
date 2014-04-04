@@ -1,8 +1,6 @@
 <h1><%= @post.title %></h1>
-<br>
 <%= @post.content %>
 
-<br>
 <br>
 <br>
 
@@ -10,4 +8,27 @@
 <br>
 <br>
 
-<%= link_to 'New comment', new_comment_path %>
+<h1>New comment</h1>
+
+<%= form_for @comment do |f| %>
+  <%= f.hidden_field :post_id, value: @post.id %>
+  <%= f.label :user_id %>
+  <br>
+  <%= f.select :user_id, User.all.map { |user| [user.name, user.id] }, prompt: true %>
+  <br>
+  <br>
+  <%= f.label 'Comment' %>
+  <br>
+  <%= f.text_area :content %>
+  <br>
+  <%= f.submit %>
+<% end %>
+<br>
+
+<%= pluralize @post.comments.count, 'comment' %>
+
+<% @post.comments.each do |comment| %>
+  <p><%= comment.content %> - by <strong><%= comment.user.name %></strong> - <%= l(comment.created_at, format: :short) %></p>
+  <hr>
+<% end %>
+
